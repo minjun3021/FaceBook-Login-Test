@@ -58,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
                                     @Override
                                     public void onResponse(Call<FacebookLoginModel> call, Response<FacebookLoginModel> response) {
                                         Log.e("username",response.body().getUsername());
+                                        Log.e("id",response.body().getId());
+                                        Log.e("gender",response.body().getGender());
+                                        Log.e("email",response.body().getEmail());
+
                                     }
 
                                     @Override
