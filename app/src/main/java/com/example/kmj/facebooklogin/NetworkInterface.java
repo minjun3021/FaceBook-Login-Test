@@ -7,6 +7,6 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 interface NetworkInterface {
-    @GET("/query")
+    @GET("/token")
     Call<FacebookLoginModel> GETData(@Query("access_token") String token);
 }

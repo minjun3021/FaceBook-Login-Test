@@ -33,14 +33,12 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     private String token;
-    Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_main);
-        btn=findViewById(R.id.main_go);
         callbackManager = CallbackManager.Factory.create();
 
         LoginButton loginbutton = findViewById(R.id.main_loginbutton);
@@ -54,6 +52,19 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("result", object.toString());
                         Log.e("token",loginResult.getAccessToken().getToken());
                         token=loginResult.getAccessToken().getToken();
+                        NetworkHelper.getInstance()
+                                .GETData(token)
+                                .enqueue(new Callback<FacebookLoginModel>() {
+                                    @Override
+                                    public void onResponse(Call<FacebookLoginModel> call, Response<FacebookLoginModel> response) {
+                                        Log.e("username",response.body().getUsername());
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<FacebookLoginModel> call, Throwable t) {
+                                        Log.e("FAIL",t.getMessage());
+                                    }
+                                });
                     }
                 });
                 Bundle parameters = new Bundle();
@@ -74,24 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NetworkHelper.getInstance()
-                        .GETData(token)
-                        .enqueue(new Callback<FacebookLoginModel>() {
-                            @Override
-                            public void onResponse(Call<FacebookLoginModel> call, Response<FacebookLoginModel> response) {
-                                Log.e("name",response.body().getUsername());
-                            }
 
-                            @Override
-                            public void onFailure(Call<FacebookLoginModel> call, Throwable t) {
-                                Log.e("FAIL",t.getMessage());
-                            }
-                        });
-            }
-        });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
